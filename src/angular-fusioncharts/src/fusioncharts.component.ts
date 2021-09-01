@@ -445,43 +445,42 @@ class FusionChartsComponent
   }
 
   ngAfterViewInit() {
-    const _this = this,
-      params = _this.constructerParams,
-      configObj = _this.configObj || (_this.configObj = {});
+    const params = this.constructerParams,
+      configObj = this.configObj || (this.configObj = {});
 
-    let _chartConfig: any = _this.chartConfig || {};
+    let _chartConfig: any = this.chartConfig || {};
 
     if (typeof _chartConfig === 'string') {
       _chartConfig = JSON.parse(_chartConfig);
     }
 
     for (const i of Object.keys(params)) {
-      const value = _this[i] || _chartConfig[i];
+      const value = this[i] || _chartConfig[i];
       if (value) {
         configObj[i] = value;
       }
     }
 
     if (configObj['type']) {
-      let events = _this.generateEventsCallback(_this.eventList);
+      let events = this.generateEventsCallback(this.eventList);
       if (!configObj['events']) {
         configObj['events'] = events;
       } else {
         configObj['events'] = Object.assign(events, configObj['events']);
       }
 
-      // configObj['renderAt'] = 'container-' + _this.chartObj.id;
-      // _this.containerId = _this.chartObj.id;
+      // configObj['renderAt'] = 'container-' + this.chartObj.id;
+      // this.containerId = this.chartObj.id;
 
       this.zone.runOutsideAngular(() => {
         setTimeout(() => {
-          _this.chartObj = FusionChartsConstructor(
-            _this.fusionchartsService,
+          this.chartObj = FusionChartsConstructor(
+            this.fusionchartsService,
             configObj
           );
-          this.initialized.emit({ chart: _this.chartObj });
-          _this.chartObj.render(
-            _this.element.nativeElement.querySelector('div')
+          this.initialized.emit({ chart: this.chartObj });
+          this.chartObj.render(
+            this.element.nativeElement.querySelector('div')
           );
         }, 1);
       });
